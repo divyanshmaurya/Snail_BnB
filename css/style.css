@@ -727,6 +727,26 @@ h3 { font-size: 1.18rem; }
   align-self: flex-end;
 }
 
+.chatbot-msg.error {
+  border-left-color: #b3423c;
+  color: #8a3833;
+}
+
+.chatbot-retry {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-left: 0.35rem;
+  padding: 0.15rem 0.7rem;
+  border: 1px solid #b3423c;
+  background: transparent;
+  color: #b3423c;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chatbot-retry:hover { background: #b3423c; color: #fff; }
+
 .chatbot-typing { display: inline-flex; gap: 4px; padding: 2px 0; }
 .chatbot-typing i {
   width: 6px;
