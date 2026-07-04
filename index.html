@@ -20,15 +20,18 @@
           <span class="brand-mark" aria-hidden="true">🐌</span>
           <span>聽見蝸牛<small>Snail B&amp;B · 花蓮壽豐</small></span>
         </a>
-        <button class="nav-toggle" aria-label="開啟選單" aria-expanded="false">☰</button>
-        <ul class="nav-links">
-          <li><a href="#about">關於我們</a></li>
-          <li><a href="#features">民宿特色</a></li>
-          <li><a href="#rooms">房型介紹</a></li>
-          <li><a href="#reviews">住客分享</a></li>
-          <li><a href="#contact">聯絡我們</a></li>
-          <li><a href="https://line.me/R/ti/p/@tlk8657q" target="_blank" rel="noopener" class="btn btn-line" style="padding:0.5rem 1.2rem">LINE 訂房</a></li>
-        </ul>
+        <div class="nav-actions">
+          <ul class="nav-links">
+            <li><a href="#about" data-i18n="nav.about">關於我們</a></li>
+            <li><a href="#features" data-i18n="nav.features">民宿特色</a></li>
+            <li><a href="#rooms" data-i18n="nav.rooms">房型介紹</a></li>
+            <li><a href="#reviews" data-i18n="nav.reviews">住客分享</a></li>
+            <li><a href="#contact" data-i18n="nav.contact">聯絡我們</a></li>
+            <li><a href="https://line.me/R/ti/p/@tlk8657q" target="_blank" rel="noopener" class="btn btn-line" style="padding:0.5rem 1.2rem" data-i18n="nav.line">LINE 訂房</a></li>
+          </ul>
+          <button id="lang-toggle" class="lang-toggle" aria-label="Switch to English">EN</button>
+          <button class="nav-toggle" aria-label="開啟選單" aria-expanded="false">☰</button>
+        </div>
       </nav>
     </div>
   </header>
@@ -113,14 +116,14 @@
         </svg>
       </div>
       <div class="hero-content container">
-        <span class="eyebrow" style="color:rgba(255,255,255,0.75)">聽見蝸牛 SNAIL B&amp;B</span>
-        <h1>放慢腳步，來去旅行吧</h1>
-        <p class="hero-sub">花蓮壽豐包棟民宿，慢活療癒的第二個家</p>
+        <span class="eyebrow" style="color:rgba(255,255,255,0.75)" data-i18n="hero.eyebrow">聽見蝸牛 SNAIL B&amp;B</span>
+        <h1 data-i18n="hero.title">放慢腳步，來去旅行吧</h1>
+        <p class="hero-sub" data-i18n="hero.sub">花蓮壽豐包棟民宿，慢活療癒的第二個家</p>
         <div class="hero-ctas">
-          <a href="https://line.me/R/ti/p/@tlk8657q" target="_blank" rel="noopener" class="btn btn-line">💬 加 LINE 詢問訂房</a>
-          <a href="#rooms" class="btn btn-outline-light">看看房型</a>
+          <a href="https://line.me/R/ti/p/@tlk8657q" target="_blank" rel="noopener" class="btn btn-line" data-i18n="hero.cta1">💬 加 LINE 詢問訂房</a>
+          <a href="#rooms" class="btn btn-outline-light" data-i18n="hero.cta2">看看房型</a>
         </div>
-        <p class="hero-note">合法民宿 · 全棟出租 · 親子友善 · LINE ID：@tlk8657q</p>
+        <p class="hero-note" data-i18n="hero.note">合法民宿 · 全棟出租 · 親子友善 · LINE ID：@tlk8657q</p>
       </div>
     </section>
 
@@ -165,11 +168,11 @@
           </svg>
         </div>
         <div class="about-text">
-          <span class="eyebrow">關於我們</span>
-          <h2>像蝸牛一樣，慢慢看世界</h2>
-          <p>「聽見蝸牛」座落在花蓮壽豐的田野之間，是一棟<strong>全棟出租的合法親子民宿</strong>。蝸牛是我們的精神象徵——牠走得慢，卻把沿路的風景都看進眼裡。我們希望每一位旅人來到這裡，也能放慢腳步，仔細看看世界，帶走值得收藏的回憶。</p>
-          <p>民宿主人是返鄉青年，也是一位<strong>取得認證的園藝治療師</strong>。他相信自然有療癒人心的力量：白天在療癒花園裡摸摸土、聞聞香草；夜裡，季節限定的螢火蟲在田邊發光，抬頭就是滿天星斗。</p>
-          <p>這裡不是飯店，是「屬於你我的家」。願你在這個第二個家，找回自己的步調。</p>
+          <span class="eyebrow" data-i18n="about.eyebrow">關於我們</span>
+          <h2 data-i18n="about.title">像蝸牛一樣，慢慢看世界</h2>
+          <p data-i18n="about.p1">「聽見蝸牛」座落在花蓮壽豐的田野之間，是一棟<strong>全棟出租的合法親子民宿</strong>。蝸牛是我們的精神象徵——牠走得慢，卻把沿路的風景都看進眼裡。我們希望每一位旅人來到這裡，也能放慢腳步，仔細看看世界，帶走值得收藏的回憶。</p>
+          <p data-i18n="about.p2">民宿主人是返鄉青年，也是一位<strong>取得認證的園藝治療師</strong>。他相信自然有療癒人心的力量：白天在療癒花園裡摸摸土、聞聞香草；夜裡，季節限定的螢火蟲在田邊發光，抬頭就是滿天星斗。</p>
+          <p data-i18n="about.p3">這裡不是飯店，是「屬於你我的家」。願你在這個第二個家，找回自己的步調。</p>
         </div>
       </div>
     </section>
@@ -178,8 +181,8 @@
     <section class="section section-alt" id="features">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">民宿特色</span>
-          <h2>四個放慢腳步的理由</h2>
+          <span class="eyebrow" data-i18n="feat.eyebrow">民宿特色</span>
+          <h2 data-i18n="feat.title">四個放慢腳步的理由</h2>
         </div>
         <div class="feature-grid">
           <article class="feature-card">
@@ -205,8 +208,8 @@
               </svg>
             </div>
             <div class="feature-body">
-              <h3>自然生態．螢火蟲與星空</h3>
-              <p>季節限定的螢火蟲在田邊飛舞，夜裡抬頭就是滿天星斗。</p>
+              <h3 data-i18n="feat.1.title">自然生態．螢火蟲與星空</h3>
+              <p data-i18n="feat.1.desc">季節限定的螢火蟲在田邊飛舞，夜裡抬頭就是滿天星斗。</p>
             </div>
           </article>
 
@@ -228,8 +231,8 @@
               </svg>
             </div>
             <div class="feature-body">
-              <h3>親子友善．主題空間</h3>
-              <p>童趣主題房、戲水池與滿櫃桌遊，大人小孩都能玩得盡興。</p>
+              <h3 data-i18n="feat.2.title">親子友善．主題空間</h3>
+              <p data-i18n="feat.2.desc">童趣主題房、戲水池與滿櫃桌遊，大人小孩都能玩得盡興。</p>
             </div>
           </article>
 
@@ -258,8 +261,8 @@
               </svg>
             </div>
             <div class="feature-body">
-              <h3>包棟專屬．烤肉與娛樂</h3>
-              <p>美式烤肉爐、麻將桌、投影機與 Switch／PS4，包棟就是你們的場。</p>
+              <h3 data-i18n="feat.3.title">包棟專屬．烤肉與娛樂</h3>
+              <p data-i18n="feat.3.desc">美式烤肉爐、麻將桌、投影機與 Switch／PS4，包棟就是你們的場。</p>
             </div>
           </article>
 
@@ -282,22 +285,22 @@
               </svg>
             </div>
             <div class="feature-body">
-              <h3>花蓮景點中心</h3>
-              <p>東大門夜市 15 分鐘、東華美食街 5 分鐘，鯉魚潭、海洋公園都在附近。</p>
+              <h3 data-i18n="feat.4.title">花蓮景點中心</h3>
+              <p data-i18n="feat.4.desc">東大門夜市 15 分鐘、東華美食街 5 分鐘，鯉魚潭、海洋公園都在附近。</p>
             </div>
           </article>
         </div>
 
         <div class="amenity-strip" aria-label="民宿設施">
-          <span class="amenity">🛁 每房獨立衛浴</span>
-          <span class="amenity">🀄 麻將桌</span>
-          <span class="amenity">🍖 美式烤肉爐</span>
-          <span class="amenity">💦 兒童戲水池</span>
-          <span class="amenity">🎲 桌遊</span>
-          <span class="amenity">📽️ 投影機</span>
-          <span class="amenity">🎮 PS4 / Switch</span>
-          <span class="amenity">🎬 Netflix / Disney+</span>
-          <span class="amenity">🎫 代訂海洋公園．飛行傘．泛舟</span>
+          <span class="amenity" data-i18n="amen.bath">🛁 每房獨立衛浴</span>
+          <span class="amenity" data-i18n="amen.mahjong">🀄 麻將桌</span>
+          <span class="amenity" data-i18n="amen.bbq">🍖 美式烤肉爐</span>
+          <span class="amenity" data-i18n="amen.pool">💦 兒童戲水池</span>
+          <span class="amenity" data-i18n="amen.games">🎲 桌遊</span>
+          <span class="amenity" data-i18n="amen.projector">📽️ 投影機</span>
+          <span class="amenity" data-i18n="amen.console">🎮 PS4 / Switch</span>
+          <span class="amenity" data-i18n="amen.stream">🎬 Netflix / Disney+</span>
+          <span class="amenity" data-i18n="amen.tickets">🎫 代訂海洋公園．飛行傘．泛舟</span>
         </div>
       </div>
     </section>
@@ -306,12 +309,12 @@
     <section class="section" id="rooms">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">房型介紹</span>
-          <h2>六間房，每一間都是一個故事</h2>
-          <p class="lede">全棟共 6 房，建議最多入住 12 位大人；每間房都有獨立衛浴與專屬主題。</p>
+          <span class="eyebrow" data-i18n="rooms.eyebrow">房型介紹</span>
+          <h2 data-i18n="rooms.title">六間房，每一間都是一個故事</h2>
+          <p class="lede" data-i18n="rooms.lede">全棟共 6 房，建議最多入住 12 位大人；每間房都有獨立衛浴與專屬主題。</p>
         </div>
         <div class="room-grid" id="room-grid"></div>
-        <div class="rooms-note">
+        <div class="rooms-note" data-i18n="rooms.note">
           🏡 <strong>包棟一晚 NT$20,000</strong>：整棟民宿只屬於你們，含全部 6 間房與公共空間。單房價格為示意，實際房價與空房請加 LINE 詢問。
         </div>
       </div>
@@ -321,8 +324,8 @@
     <section class="section section-alt" id="reviews">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">住客分享</span>
-          <h2>旅人們留下的話</h2>
+          <span class="eyebrow" data-i18n="rev.eyebrow">住客分享</span>
+          <h2 data-i18n="rev.title">旅人們留下的話</h2>
         </div>
         <div class="testimonial-grid" id="testimonial-grid"></div>
       </div>
@@ -332,10 +335,10 @@
     <section class="section" id="events">
       <div class="container">
         <div class="events-band">
-          <span class="eyebrow" style="color:rgba(255,255,255,0.7)">最新活動</span>
-          <h2>烤肉方案與季節活動</h2>
-          <p>美式 BBQ 烤肉方案、螢火蟲季導覽與園藝療癒體驗，最新內容將在這裡公布。想先了解細節，歡迎加 LINE 直接詢問管家。</p>
-          <a href="https://line.me/R/ti/p/@tlk8657q" target="_blank" rel="noopener" class="btn btn-line">💬 LINE 詢問活動方案</a>
+          <span class="eyebrow" style="color:rgba(255,255,255,0.7)" data-i18n="events.eyebrow">最新活動</span>
+          <h2 data-i18n="events.title">烤肉方案與季節活動</h2>
+          <p data-i18n="events.desc">美式 BBQ 烤肉方案、螢火蟲季導覽與園藝療癒體驗，最新內容將在這裡公布。想先了解細節，歡迎加 LINE 直接詢問管家。</p>
+          <a href="https://line.me/R/ti/p/@tlk8657q" target="_blank" rel="noopener" class="btn btn-line" data-i18n="events.cta">💬 LINE 詢問活動方案</a>
         </div>
       </div>
     </section>
@@ -344,37 +347,37 @@
     <section class="section" id="contact" style="padding-top:0">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">聯絡我們</span>
-          <h2>來的路上，慢慢開就好</h2>
+          <span class="eyebrow" data-i18n="contact.eyebrow">聯絡我們</span>
+          <h2 data-i18n="contact.title">來的路上，慢慢開就好</h2>
         </div>
         <div class="contact-grid">
           <div class="contact-info">
             <div class="contact-item">
               <div class="contact-icon" aria-hidden="true">💬</div>
               <div>
-                <strong>LINE 訂房（主要聯絡方式）</strong>
-                <p><a href="https://line.me/R/ti/p/@tlk8657q" target="_blank" rel="noopener">@tlk8657q</a>｜加入好友即可詢問空房與包棟</p>
+                <strong data-i18n="contact.line.t">LINE 訂房（主要聯絡方式）</strong>
+                <p data-i18n="contact.line.d"><a href="https://line.me/R/ti/p/@tlk8657q" target="_blank" rel="noopener">@tlk8657q</a>｜加入好友即可詢問空房與包棟</p>
               </div>
             </div>
             <div class="contact-item">
               <div class="contact-icon" aria-hidden="true">📞</div>
               <div>
-                <strong>電話</strong>
+                <strong data-i18n="contact.phone.t">電話</strong>
                 <p><a href="tel:0989226348">0989-226-348</a></p>
               </div>
             </div>
             <div class="contact-item">
               <div class="contact-icon" aria-hidden="true">📍</div>
               <div>
-                <strong>地址</strong>
-                <p>花蓮縣壽豐鄉豐坪路三段 1411 巷 165 弄 16 號</p>
+                <strong data-i18n="contact.addr.t">地址</strong>
+                <p data-i18n="contact.addr.d">花蓮縣壽豐鄉豐坪路三段 1411 巷 165 弄 16 號</p>
               </div>
             </div>
             <div class="contact-item">
               <div class="contact-icon" aria-hidden="true">🕒</div>
               <div>
-                <strong>入住／退房</strong>
-                <p>入住 15:00 後｜退房 11:00 前</p>
+                <strong data-i18n="contact.time.t">入住／退房</strong>
+                <p data-i18n="contact.time.d">入住 15:00 後｜退房 11:00 前</p>
               </div>
             </div>
           </div>
@@ -397,14 +400,15 @@
         <span class="brand-mark" aria-hidden="true">🐌</span>
         <span>聽見蝸牛<small>Snail B&amp;B · 花蓮壽豐</small></span>
       </a>
-      <p>放慢腳步，來去旅行吧。屬於你和我的家。</p>
-      <p style="margin-top:0.5rem">LINE @tlk8657q｜0989-226-348｜花蓮縣壽豐鄉豐坪路三段 1411 巷 165 弄 16 號</p>
+      <p data-i18n="footer.tag">放慢腳步，來去旅行吧。屬於你和我的家。</p>
+      <p style="margin-top:0.5rem" data-i18n="footer.info">LINE @tlk8657q｜0989-226-348｜花蓮縣壽豐鄉豐坪路三段 1411 巷 165 弄 16 號</p>
       <div class="footer-meta">
-        © <span id="year"></span> 聽見蝸牛 Snail B&amp;B — 展示網站（Demo），圖片為 AI 產生之示意圖。
+        © <span id="year"></span> <span data-i18n="footer.meta">聽見蝸牛 Snail B&amp;B — 展示網站（Demo），圖片為 AI 產生之示意圖。</span>
       </div>
     </div>
   </footer>
 
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
   <script src="js/assistant.js"></script>
 </body>

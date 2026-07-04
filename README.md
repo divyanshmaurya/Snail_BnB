@@ -16,7 +16,24 @@ Sales-demo website for 聽見蝸牛 Snail B&B, a whole-house-rental (包棟) fam
 
 ## AI Assistant (小蝸)
 
-Floating widget bottom-right (`js/assistant.js`), opens with a brand-tone greeting. Preset with the spec's 5 Q&A pairs (包棟價位 / 寵物 / 烤肉方案 / 房間數 / 入住退房時間) via keyword matching + quick-question chips; falls back to the LINE contact.
+Floating widget bottom-right (`js/assistant.js`), opens with a brand-tone greeting.
+
+- **Gemini-powered**: messages go to `/api/chat` (`api/chat.js`, a Vercel serverless function) which calls the Gemini API with a brand system prompt containing all guesthouse facts and the 5 spec FAQs. Conversation history is passed for context.
+- **Automatic fallback**: if the API is unreachable or `GEMINI_API_KEY` isn't set, the widget silently falls back to the built-in keyword-matched 5 FAQ answers, so the demo always works (including opening `index.html` locally).
+- **Voice chat**: 🎤 mic button for speech input (Web Speech Recognition, zh-TW/en-US follows the site language) and a 🔊 toggle in the chat header to read replies aloud (Speech Synthesis). Buttons hide themselves on unsupported browsers.
+- **Bilingual**: greeting, quick-question chips and fallback answers switch with the site language.
+
+## Language toggle
+
+An `EN / 中文` button in the top-right of the navbar switches the whole site between Traditional Chinese (default) and English — static copy via `data-i18n` attributes (`js/i18n.js`), dynamic content (rooms, reviews, chatbot) re-renders on the `langchange` event. Choice persists in `localStorage`.
+
+## Deploying to Vercel
+
+1. Import the GitHub repo at vercel.com/new (Framework Preset: **Other**; no build command or output directory needed).
+2. In **Settings → Environment Variables**, add `GEMINI_API_KEY` with your Google AI Studio key (optional: `GEMINI_MODEL`, defaults to `gemini-2.5-flash`).
+3. Deploy. Static files are served as-is and `api/chat.js` becomes the `/api/chat` function automatically.
+
+Local development with the function: `npx vercel dev` (plain `python3 -m http.server` also works — the chatbot then uses the FAQ fallback).
 
 ## Images
 
