@@ -29,7 +29,8 @@
         en: "A lofted layout: a small lounge below, the kids' secret base above, and a private balcony for stargazing."
       },
       tags: [{ zh: "閣樓設計", en: "Loft layout" }, { zh: "小客廳", en: "Lounge" }, { zh: "陽台", en: "Balcony" }],
-      wall: "#eef1ea", floor: "#c9b28a", bed: "#8fa8b8", accent: "loft"
+      img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1000&q=80",
+      alt: { zh: "北歐風閣樓親子房", en: "Nordic loft family room" }
     },
     {
       name: { zh: "童趣漫畫親子房", en: "Playful Comic Family Room" },
@@ -40,7 +41,8 @@
         en: "Bold colors and playful wall art — like stepping into a comic panel. Kids never want to leave."
       },
       tags: [{ zh: "漫畫風", en: "Comic style" }, { zh: "繽紛牆面", en: "Colorful walls" }, { zh: "親子友善", en: "Family friendly" }],
-      wall: "#fdf0dc", floor: "#d9a76a", bed: "#e2907e", accent: "comic"
+      img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1000&q=80",
+      alt: { zh: "童趣漫畫親子房", en: "Playful comic family room" }
     },
     {
       name: { zh: "復古卡通雙人房", en: "Retro Cartoon Double" },
@@ -51,7 +53,8 @@
         en: "Nostalgic toys and retro colors that wake up your inner child — cute, warm and cozy for two."
       },
       tags: [{ zh: "復古風", en: "Retro" }, { zh: "可愛佈置", en: "Cute decor" }, { zh: "雙人", en: "Double" }],
-      wall: "#f6e6e0", floor: "#b98d6d", bed: "#c96f5e", accent: "retro"
+      img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1000&q=80",
+      alt: { zh: "復古卡通雙人房", en: "Retro cartoon double room" }
     },
     {
       name: { zh: "熊熊主題雙人房", en: "Bear-Themed Cozy Double" },
@@ -62,7 +65,8 @@
         en: "Gentle earth tones with plush bear companions — so soft you won't want to get up."
       },
       tags: [{ zh: "熊熊主題", en: "Bear theme" }, { zh: "溫暖色調", en: "Warm tones" }, { zh: "雙人", en: "Double" }],
-      wall: "#f3ead9", floor: "#c1a684", bed: "#a8845f", accent: "bear"
+      img: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1000&q=80",
+      alt: { zh: "熊熊主題雙人房", en: "Bear-themed cozy double room" }
     },
     {
       name: { zh: "3D 街頭彩繪雙人房", en: "3D Street-Art Double" },
@@ -73,7 +77,8 @@
         en: "A full 3D European street mural wall — every photo looks like a magazine spread."
       },
       tags: [{ zh: "3D 彩繪", en: "3D mural" }, { zh: "拍照打卡", en: "Photogenic" }, { zh: "雙人", en: "Double" }],
-      wall: "#e8ecef", floor: "#9aa4ab", bed: "#6f8fa8", accent: "mural"
+      img: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1000&q=80",
+      alt: { zh: "3D 街頭彩繪雙人房", en: "3D street-art double room" }
     },
     {
       name: { zh: "花園景觀雙人房", en: "Garden View Double" },
@@ -84,59 +89,10 @@
         en: "The therapy garden right outside your window — greenery and natural light for travellers who need quiet recharging."
       },
       tags: [{ zh: "花園景觀", en: "Garden view" }, { zh: "自然採光", en: "Natural light" }, { zh: "雙人", en: "Double" }],
-      wall: "#eaf0e2", floor: "#b9a884", bed: "#7f9a72", accent: "garden"
+      img: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1000&q=80",
+      alt: { zh: "花園景觀雙人房", en: "Garden view double room" }
     }
   ];
-
-  // 各房型的主題點綴（待替換：AI 生成室內照 — 暖光、木質、乾淨溫馨的台灣民宿尺度）
-  const ACCENTS = {
-    loft: `<rect x="270" y="30" width="8" height="105" fill="#8a6f4d"/><rect x="300" y="30" width="8" height="105" fill="#8a6f4d"/>
-           <rect x="264" y="45" width="50" height="7" rx="3" fill="#8a6f4d"/><rect x="264" y="70" width="50" height="7" rx="3" fill="#8a6f4d"/>
-           <rect x="264" y="95" width="50" height="7" rx="3" fill="#8a6f4d"/><rect x="240" y="22" width="130" height="10" rx="5" fill="#a58a63"/>`,
-    comic: `<circle cx="290" cy="55" r="17" fill="#f0c060"/><rect x="320" y="42" width="34" height="26" rx="6" fill="#8fb6c9"/>
-            <path d="M262 78 l12 -18 l12 18 Z" fill="#e2717e"/><circle cx="330" cy="88" r="9" fill="#9dbb8b"/>
-            <path d="M258 40 q8 -12 20 -6" stroke="#d97f8f" stroke-width="4" fill="none" stroke-linecap="round"/>`,
-    retro: `<rect x="268" y="42" width="42" height="52" rx="6" fill="#e8d5b5"/><circle cx="289" cy="60" r="11" fill="#c96f5e"/>
-            <circle cx="284" cy="57" r="2.5" fill="#3d382f"/><circle cx="294" cy="57" r="2.5" fill="#3d382f"/>
-            <path d="M284 65 q5 4 10 0" stroke="#3d382f" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <rect x="322" y="52" width="30" height="42" rx="4" fill="#b98d6d"/><circle cx="337" cy="66" r="8" fill="#f0c060"/>`,
-    bear: `<circle cx="300" cy="70" r="22" fill="#b08d62"/><circle cx="283" cy="52" r="8" fill="#b08d62"/><circle cx="317" cy="52" r="8" fill="#b08d62"/>
-           <circle cx="283" cy="52" r="4" fill="#8a6a45"/><circle cx="317" cy="52" r="4" fill="#8a6a45"/>
-           <circle cx="293" cy="66" r="3" fill="#3d382f"/><circle cx="307" cy="66" r="3" fill="#3d382f"/>
-           <ellipse cx="300" cy="76" rx="7" ry="5" fill="#e8d5b5"/><circle cx="300" cy="74" r="2.5" fill="#3d382f"/>`,
-    mural: `<rect x="255" y="32" width="110" height="72" rx="4" fill="#cfd8dd"/>
-            <path d="M255 104 l30 -34 l22 20 l24 -30 l34 44 Z" fill="#8fa5b3"/>
-            <rect x="285" y="66" width="16" height="38" fill="#6f8090"/><rect x="308" y="76" width="14" height="28" fill="#7d92a2"/>
-            <circle cx="345" cy="46" r="9" fill="#f0dca0"/>`,
-    garden: `<rect x="262" y="36" width="96" height="66" rx="6" fill="#bcd9c4"/>
-             <path d="M262 102 q24 -26 48 -12 q26 -18 48 4 v 8 h -96 Z" fill="#7f9a72"/>
-             <circle cx="290" cy="58" r="7" fill="#e2a1b0"/><circle cx="322" cy="50" r="6" fill="#f0c060"/>
-             <rect x="334" y="108" width="20" height="16" rx="3" fill="#a4785a"/><path d="M344 108 q-6 -16 4 -24 M344 108 q8 -12 2 -22" stroke="#5f8460" stroke-width="4" fill="none" stroke-linecap="round"/>`
-  };
-
-  function roomSVG(r) {
-    return `
-      <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect width="400" height="200" fill="${r.wall}"/>
-        <rect y="140" width="400" height="60" fill="${r.floor}"/>
-        <rect y="136" width="400" height="6" fill="rgba(0,0,0,0.08)"/>
-        <rect x="40" y="34" width="70" height="58" rx="5" fill="#cfe3ea"/>
-        <rect x="72" y="34" width="5" height="58" fill="${r.wall}"/><rect x="40" y="60" width="70" height="5" fill="${r.wall}"/>
-        <rect x="36" y="30" width="78" height="66" rx="6" fill="none" stroke="#a58a63" stroke-width="5"/>
-        <g>
-          <rect x="60" y="118" width="180" height="46" rx="8" fill="#f5f0e4"/>
-          <rect x="60" y="104" width="180" height="26" rx="10" fill="${r.bed}"/>
-          <rect x="72" y="94" width="52" height="22" rx="9" fill="#fff"/>
-          <rect x="134" y="94" width="52" height="22" rx="9" fill="#fff"/>
-          <rect x="52" y="86" width="12" height="78" rx="5" fill="#8a6f4d"/>
-          <rect x="236" y="86" width="12" height="78" rx="5" fill="#8a6f4d"/>
-        </g>
-        <circle cx="200" cy="34" r="13" fill="#ffd98a"/>
-        <path d="M200 12 v10" stroke="#8a6f4d" stroke-width="3"/>
-        <circle cx="200" cy="34" r="18" fill="#ffd98a" opacity="0.25"/>
-        ${ACCENTS[r.accent] || ""}
-      </svg>`;
-  }
 
   const roomGrid = $("#room-grid");
   function renderRooms() {
@@ -144,9 +100,9 @@
     roomGrid.innerHTML = ROOMS.map(
       (r) => `
       <article class="room-card">
-        <div class="room-media">
-          ${roomSVG(r)}
+        <div class="room-media photo">
           <span class="room-cap">${t(`${r.pax} 人房`, `Sleeps ${r.pax}`)}</span>
+          <img src="${r.img}" alt="${t(r.alt.zh, r.alt.en)}" loading="lazy" onerror="this.style.display='none'">
         </div>
         <div class="room-body">
           <h3>${t(r.name.zh, r.name.en)}</h3>
@@ -166,8 +122,7 @@
       text: {
         zh: "孩子第一次看到螢火蟲，興奮得一直捨不得睡。白天玩戲水池、晚上看星星，退房時女兒問我們下次什麼時候再來。",
         en: "Our kids saw fireflies for the first time and were too excited to sleep. Splash pool by day, stars by night — at checkout our daughter asked when we could come back."
-      },
-      color: "#e2a1b0", face: "#f6e3d9"
+      }
     },
     {
       name: { zh: "阿凱", en: "Kai" },
@@ -175,8 +130,7 @@
       text: {
         zh: "包棟真的太爽！晚上烤肉配啤酒，接著麻將、Switch 輪番上陣，完全不用顧慮吵到別人。管家超級親切，烤肉用具都幫我們準備好。",
         en: "Renting the whole house is the best! BBQ and beers at night, then mahjong and Switch till late — no worrying about disturbing anyone. The host even prepped all the grill gear for us."
-      },
-      color: "#8fb6c9", face: "#eaf2f5"
+      }
     },
     {
       name: { zh: "小柔", en: "Rou" },
@@ -184,8 +138,7 @@
       text: {
         zh: "主人帶我們認識花園裡的香草，聊園藝治療聊了一個晚上。這裡安靜得能聽見風聲，住完真的有充飽電的感覺。",
         en: "The host walked us through the herbs in the garden and we talked horticultural therapy all evening. It's so quiet you can hear the wind — we left fully recharged."
-      },
-      color: "#9dbb8b", face: "#eef3e6"
+      }
     },
     {
       name: { zh: "志明", en: "Chih-Ming" },
@@ -193,19 +146,11 @@
       text: {
         zh: "地點超方便，去海洋公園、鯉魚潭都很近，晚上還能殺去東大門夜市。長輩住得舒服，孩子玩得開心，全家都滿意。",
         en: "The location is so convenient — Ocean Park and Liyu Lake are close, and we hit Dongdamen Night Market in the evening. Comfortable for the grandparents, fun for the kids."
-      },
-      color: "#e8a94f", face: "#fbeed7"
+      }
     }
   ];
 
-  function avatarSVG(r) {
-    return `
-      <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect width="46" height="46" fill="${r.color}"/>
-        <circle cx="23" cy="18" r="9" fill="${r.face}"/>
-        <path d="M8 46 a15 15 0 0 1 30 0 Z" fill="${r.face}"/>
-      </svg>`;
-  }
+
 
   const testimonialGrid = $("#testimonial-grid");
   function renderReviews() {
@@ -216,7 +161,7 @@
         <div class="stars" aria-label="${t("五顆星評價", "Five-star review")}">★★★★★</div>
         <blockquote>${t(`「${r.text.zh}」`, `“${r.text.en}”`)}</blockquote>
         <div class="testimonial-author">
-          <div class="avatar">${avatarSVG(r)}</div>
+          <div class="avatar-initial" aria-hidden="true">${t(r.name.zh, r.name.en).charAt(0)}</div>
           <div><strong>${t(r.name.zh, r.name.en)}</strong><span>${t(r.type.zh, r.type.en)}</span></div>
         </div>
       </article>`

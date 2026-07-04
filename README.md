@@ -37,7 +37,7 @@ Local development with the function: `npx vercel dev` (plain `python3 -m http.se
 
 ## Images
 
-The spec calls for AI-generated photography. This environment cannot generate raster images, so every image slot currently holds a hand-built illustrated SVG scene matching the spec's image direction (each is marked with a `待替換：AI 生成圖` comment). Swap them for generated photos before the client preview if photorealism is required.
+Professional real-estate theme with photographic imagery. All photos are Unsplash placeholder stock loaded from `images.unsplash.com` (marked `待換 AI 生成圖` in the HTML) — swap the URLs for AI-generated brand photos before the client preview. Every image has an `onerror` fallback (neutral block) so a broken URL never shows a broken-image icon; the hero and events-band backgrounds have solid fallback colors underneath.
 
 ## Tech & running
 

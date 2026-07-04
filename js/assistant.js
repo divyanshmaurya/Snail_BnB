@@ -122,26 +122,35 @@
   }
 
   // ---------- 聊天視窗 UI ----------
+  const ICONS = {
+    chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+    close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+    mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>',
+    speakerOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>',
+    speakerOn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>',
+    send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>'
+  };
+
   const root = document.createElement("div");
   root.className = "chatbot";
   root.innerHTML = `
-    <button class="chatbot-toggle" aria-label="開啟 AI 小幫手" aria-expanded="false">🐌</button>
+    <button class="chatbot-toggle" aria-label="開啟 AI 助理" aria-expanded="false">${ICONS.chat}</button>
     <div class="chatbot-panel" hidden>
       <div class="chatbot-head">
-        <div class="chatbot-avatar" aria-hidden="true">🐌</div>
+        <div class="chatbot-avatar" aria-hidden="true">蝸</div>
         <div>
-          <strong class="chatbot-title">小蝸 AI 小幫手</strong>
-          <span>聽見蝸牛 Snail B&amp;B</span>
+          <strong class="chatbot-title">小蝸 AI 助理</strong>
+          <span>Snail B&amp;B</span>
         </div>
-        <button class="chatbot-tts" aria-pressed="false" title="朗讀回覆">🔇</button>
-        <button class="chatbot-close" aria-label="關閉聊天視窗">✕</button>
+        <button class="chatbot-tts" aria-pressed="false" title="朗讀回覆">${ICONS.speakerOff}</button>
+        <button class="chatbot-close" aria-label="關閉聊天視窗">${ICONS.close}</button>
       </div>
       <div class="chatbot-messages" role="log" aria-live="polite"></div>
       <div class="chatbot-chips"></div>
       <form class="chatbot-input">
-        <button type="button" class="chatbot-mic" title="語音輸入">🎤</button>
+        <button type="button" class="chatbot-mic" title="語音輸入">${ICONS.mic}</button>
         <input type="text" placeholder="想問點什麼呢？" aria-label="輸入訊息" autocomplete="off">
-        <button type="submit" class="btn btn-primary" aria-label="送出">➤</button>
+        <button type="submit" class="btn btn-primary" aria-label="送出">${ICONS.send}</button>
       </form>
     </div>`;
   document.body.appendChild(root);
@@ -183,7 +192,7 @@
     ttsBtn.addEventListener("click", () => {
       ttsOn = !ttsOn;
       ttsBtn.setAttribute("aria-pressed", ttsOn);
-      ttsBtn.textContent = ttsOn ? "🔊" : "🔇";
+      ttsBtn.innerHTML = ttsOn ? ICONS.speakerOn : ICONS.speakerOff;
       if (!ttsOn) window.speechSynthesis.cancel();
     });
   } else {
@@ -256,7 +265,7 @@
 
   function applyLang() {
     renderChips();
-    root.querySelector(".chatbot-title").textContent = t("小蝸 AI 小幫手", "Snaily · AI Assistant");
+    root.querySelector(".chatbot-title").textContent = t("小蝸 AI 助理", "Snaily · AI Concierge");
     input.placeholder = t("想問點什麼呢？", "Ask me anything…");
     micBtn.title = t("語音輸入", "Voice input");
     ttsBtn.title = t("朗讀回覆", "Read replies aloud");
@@ -276,8 +285,8 @@
         greeted = true;
         botSay(
           t(
-            "嗨，我是小蝸 🐌 聽見蝸牛的 AI 小幫手。<br>放慢腳步，有什麼想知道的呢？下面的常見問題可以直接點，也可以按 🎤 用說的喔！",
-            "Hi, I'm Snaily 🐌 the Snail B&B AI assistant.<br>Slow down — what would you like to know? Tap a question below, or press 🎤 to speak!"
+            "您好，我是小蝸——聽見蝸牛的 AI 助理。<br>放慢腳步，有什麼想知道的呢？可以點選下方常見問題，或按下麥克風用語音詢問。",
+            "Hello, I'm Snaily — the Snail B&B AI concierge.<br>Slow down and take your time: tap a question below, or press the microphone to ask by voice."
           )
         );
       }
