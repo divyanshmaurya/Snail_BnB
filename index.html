@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snail BnB · Slow travel, done right</title>
+  <meta name="description" content="Snail BnB — the world's slowest booking platform. Handpicked garden, forest and waterfront stays for discerning gastropods.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐌</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,600&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">🐌</span> Snail BnB</a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+        <ul class="nav-links">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="listings.html">Stays</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="host.html" class="btn btn-ghost" style="padding:0.5rem 1.2rem">Become a host</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <div>
+          <span class="eyebrow">The world's slowest booking platform</span>
+          <h1>Travel at the speed of <span class="highlight">life</span>. Snail life.</h1>
+          <p class="lede">Handpicked shell-ters across gardens, forests and pond shores — every stay damp, every wall potentially edible, every journey an adventure measured in weeks.</p>
+
+          <form class="search-bar" id="hero-search" role="search">
+            <div class="search-field">
+              <label for="hero-q">Where to?</label>
+              <input type="text" id="hero-q" placeholder="Try 'lettuce' or 'pond'">
+            </div>
+            <div class="search-field">
+              <label for="hero-cat">Habitat</label>
+              <select id="hero-cat">
+                <option value="all">Any habitat</option>
+                <option value="garden">Garden</option>
+                <option value="forest">Forest</option>
+                <option value="urban">Urban patio</option>
+                <option value="waterfront">Waterfront</option>
+              </select>
+            </div>
+            <div class="search-field">
+              <label for="hero-date">Slide in</label>
+              <input type="date" id="hero-date">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
+
+          <div class="hero-badges">
+            <div class="hero-badge"><strong>2,400+</strong><span>happy gastropods hosted</span></div>
+            <div class="hero-badge"><strong>0.004 km/h</strong><span>average guest arrival speed</span></div>
+            <div class="hero-badge"><strong>100%</strong><span>slug-inclusive since day one</span></div>
+          </div>
+        </div>
+
+        <div class="hero-art" aria-hidden="true">
+          <svg width="380" height="320" viewBox="0 0 380 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+            <!-- ground -->
+            <ellipse cx="190" cy="285" rx="170" ry="22" fill="#a8c686" opacity="0.45"/>
+            <!-- shell house -->
+            <circle cx="225" cy="185" r="88" fill="#c96f4a"/>
+            <circle cx="225" cy="185" r="88" fill="none" stroke="#a5522f" stroke-width="6"/>
+            <path d="M225 185 m0 -66 a66 66 0 1 1 -46 112 a48 48 0 1 0 32 -82 a30 30 0 1 1 -20 36" stroke="#a5522f" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <!-- door on shell -->
+            <rect x="205" y="228" width="40" height="48" rx="20" fill="#7d3c1e"/>
+            <circle cx="236" cy="254" r="3.5" fill="#e0a458"/>
+            <!-- body -->
+            <path d="M96 273 q-14 -3 -14 -18 q0 -20 26 -22 q10 -38 52 -38 q22 0 34 14 l38 44 q6 10 -4 16 q-8 4 -132 4 z" fill="#a8c686"/>
+            <!-- eye stalks -->
+            <path d="M116 200 q-6 -28 -22 -40" stroke="#a8c686" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <path d="M142 196 q2 -30 14 -46" stroke="#a8c686" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <circle cx="92" cy="157" r="10" fill="#a8c686"/>
+            <circle cx="158" cy="147" r="10" fill="#a8c686"/>
+            <circle cx="90" cy="155" r="4" fill="#2c3327"/>
+            <circle cx="156" cy="145" r="4" fill="#2c3327"/>
+            <!-- smile -->
+            <path d="M104 232 q8 8 18 4" stroke="#2f5240" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            <!-- welcome sign -->
+            <rect x="288" y="216" width="6" height="62" rx="3" fill="#8a6f4d"/>
+            <rect x="262" y="196" width="60" height="34" rx="8" fill="#faf7f0" stroke="#8a6f4d" stroke-width="3"/>
+            <text x="292" y="218" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2f5240">OPEN</text>
+            <!-- sprouts -->
+            <path d="M52 280 q0 -18 -12 -24 M52 280 q0 -14 12 -20" stroke="#4a7c59" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M336 276 q0 -14 -10 -18 M336 276 q0 -10 10 -14" stroke="#4a7c59" stroke-width="4" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured stays -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Guest favourites</span>
+          <h2>Featured shell-ters</h2>
+          <p class="lede">Our highest-rated stays, loved by snails who took months to get there and stayed anyway.</p>
+        </div>
+        <div class="card-grid" id="featured-grid"></div>
+        <div style="text-align:center; margin-top:2.5rem">
+          <a href="listings.html" class="btn btn-primary">Browse all stays</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head center">
+          <span class="eyebrow">How it works</span>
+          <h2>Book in three easy(ish) steps</h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-icon" aria-hidden="true">🔍</div>
+            <h3>1. Browse slowly</h3>
+            <p>Take your time. Seriously — our listings aren't going anywhere, and neither are you, quickly.</p>
+          </div>
+          <div class="step">
+            <div class="step-icon" aria-hidden="true">📅</div>
+            <h3>2. Reserve your dates</h3>
+            <p>Pick your slide-in and slide-out dates. We recommend booking a full season to make the trip worthwhile.</p>
+          </div>
+          <div class="step">
+            <div class="step-icon" aria-hidden="true">🐌</div>
+            <h3>3. Begin the journey</h3>
+            <p>Leave now. No really — if the stay is more than a garden away, you should already be moving.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head center">
+          <span class="eyebrow">Trail reviews</span>
+          <h2>Slow words from happy guests</h2>
+        </div>
+        <div class="testimonials" id="testimonial-grid"></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2>Got a damp corner going spare?</h2>
+            <p>Turn that flowerpot, log or shady ledge into extra leaves. Join 300+ hosts sharing their habitats on Snail BnB.</p>
+          </div>
+          <a href="host.html" class="btn btn-accent">Become a host</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">🐌</span> Snail BnB</a>
+          <p class="footer-tagline">Slow travel, done right. A demo site for discerning gastropods.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="listings.html">All stays</a></li>
+            <li><a href="listings.html?category=garden">Garden stays</a></li>
+            <li><a href="listings.html?category=forest">Forest stays</a></li>
+            <li><a href="listings.html?category=waterfront">Waterfront</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Hosting</h4>
+          <ul>
+            <li><a href="host.html">Become a host</a></li>
+            <li><a href="host.html#perks">Host perks</a></li>
+            <li><a href="about.html#faq">Hosting FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="about.html#faq">FAQ</a></li>
+            <li><a href="about.html#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> Snail BnB. A fictional demo — no gastropods were hurried.</span>
+        <span>Made with 🥬 and patience</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

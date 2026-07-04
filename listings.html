@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All stays · Snail BnB</title>
+  <meta name="description" content="Browse every Snail BnB stay — garden lofts, forest hollows, patio villas and pondside pebbles.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐌</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,600&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">🐌</span> Snail BnB</a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="listings.html" class="active">Stays</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="host.html" class="btn btn-ghost" style="padding:0.5rem 1.2rem">Become a host</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <div class="container">
+        <span class="eyebrow">Browse stays</span>
+        <h1>Find your next shell-ter</h1>
+        <p class="lede" style="margin-top:0.75rem">Every property is inspected for dampness, shade and structural edibility.</p>
+
+        <div class="filter-bar" role="group" aria-label="Filter by habitat">
+          <button class="filter-chip active" data-category="all">All habitats</button>
+          <button class="filter-chip" data-category="garden">🥬 Garden</button>
+          <button class="filter-chip" data-category="forest">🍄 Forest</button>
+          <button class="filter-chip" data-category="urban">🪴 Urban patio</button>
+          <button class="filter-chip" data-category="waterfront">🏖️ Waterfront</button>
+        </div>
+
+        <div class="field" style="max-width:380px; margin-top:1rem">
+          <label for="listings-search">Search</label>
+          <input type="search" id="listings-search" placeholder="Name, location or amenity…">
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:1rem">
+      <div class="container">
+        <p class="results-count" id="results-count"></p>
+        <div class="card-grid" id="listings-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">🐌</span> Snail BnB</a>
+          <p class="footer-tagline">Slow travel, done right. A demo site for discerning gastropods.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="listings.html">All stays</a></li>
+            <li><a href="listings.html?category=garden">Garden stays</a></li>
+            <li><a href="listings.html?category=forest">Forest stays</a></li>
+            <li><a href="listings.html?category=waterfront">Waterfront</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Hosting</h4>
+          <ul>
+            <li><a href="host.html">Become a host</a></li>
+            <li><a href="host.html#perks">Host perks</a></li>
+            <li><a href="about.html#faq">Hosting FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="about.html#faq">FAQ</a></li>
+            <li><a href="about.html#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> Snail BnB. A fictional demo — no gastropods were hurried.</span>
+        <span>Made with 🥬 and patience</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
