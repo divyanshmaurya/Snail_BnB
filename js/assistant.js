@@ -68,7 +68,7 @@
         <div class="chatbot-avatar" aria-hidden="true">蝸</div>
         <div>
           <strong class="chatbot-title">小蝸 AI 助理</strong>
-          <span>Powered by Gemini</span>
+          <span>聽見蝸牛 Snail B&amp;B</span>
         </div>
         <button class="chatbot-tts" aria-pressed="false" title="語音回覆">${ICONS.speakerOff}</button>
         <button class="chatbot-close" aria-label="關閉聊天視窗">${ICONS.close}</button>
