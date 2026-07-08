@@ -788,6 +788,36 @@ h3 { font-size: 1.18rem; }
 
 .chatbot-chips button:hover { border-color: var(--bronze); color: var(--bronze-deep); }
 
+.voice-status {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 1.15rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  background: var(--card);
+  border-top: 1px solid var(--line);
+}
+
+.voice-status[hidden] { display: none; }
+
+.voice-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #b3423c;
+  flex-shrink: 0;
+  animation: voice-pulse 1.3s infinite;
+}
+
+@keyframes voice-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.voice-hint { margin-left: auto; opacity: 0.65; }
+
 .chatbot-input {
   display: flex;
   gap: 0.55rem;
@@ -797,9 +827,10 @@ h3 { font-size: 1.18rem; }
 
 .chatbot-input input {
   flex: 1;
+  min-width: 0;
   font-family: var(--font-body);
-  font-size: 0.92rem;
-  padding: 0.65rem 0.95rem;
+  font-size: 16px; /* <16px 會讓 iOS Safari 聚焦時自動縮放，導致送出鈕被切掉 */
+  padding: 0.6rem 0.95rem;
   border: 1px solid var(--line);
   background: var(--ivory);
   color: var(--ink);
@@ -808,13 +839,14 @@ h3 { font-size: 1.18rem; }
 
 .chatbot-input input:focus { border-color: var(--bronze); }
 
-.chatbot-input .btn { padding: 0.55rem 1.05rem; }
+.chatbot-input .btn { padding: 0.55rem 1.05rem; flex-shrink: 0; }
 .chatbot-input .btn svg { width: 15px; height: 15px; }
 
 .chatbot-mic {
   width: 42px;
   height: 42px;
   flex-shrink: 0;
+  align-self: center;
   border: 1px solid var(--line);
   background: var(--ivory);
   color: var(--ink-soft);
@@ -847,6 +879,20 @@ h3 { font-size: 1.18rem; }
   .hero { min-height: 72vh; }
   .hero-stats { gap: 2rem; }
   .section { padding: 4.25rem 0; }
+}
+
+@media (max-width: 480px) {
+  .chatbot {
+    right: max(0.75rem, env(safe-area-inset-right));
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+  .chatbot-panel {
+    width: calc(100vw - 1.5rem);
+    height: min(560px, calc(100vh - 6rem));
+    height: min(560px, calc(100dvh - 6rem));
+  }
+  .chatbot-input { padding: 0.7rem 0.8rem calc(0.9rem + env(safe-area-inset-bottom)); }
+  .chatbot-chips { padding: 0.6rem 0.8rem; }
 }
 
 @media (max-width: 700px) {

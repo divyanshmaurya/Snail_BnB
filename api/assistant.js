@@ -32,9 +32,20 @@ const SYSTEM_PROMPT = `你是「小蝸」，花蓮壽豐民宿「聽見蝸牛 Sn
 - 房型：北歐風閣樓親子房(4人)、童趣漫畫親子房(4人)、復古卡通雙人房(2人)、熊熊主題雙人房(2人)、3D 街頭彩繪雙人房(2人)、花園景觀雙人房(2人)。
 
 【規則】
-- 用使用者的語言回答：中文用繁體中文，英文用英文。
 - 不知道的事（特定日期空房、確切單房價格、優惠細節）不要編造，請引導旅客加 LINE @tlk8657q 詢問管家。
-- 不談論與民宿無關的敏感話題；離題時溫柔地把話題帶回旅宿與花蓮旅遊。`;
+- 不談論與民宿無關的敏感話題；離題時溫柔地把話題帶回旅宿與花蓮旅遊。
+
+[LANGUAGE RULE — HIGHEST PRIORITY]
+Reply in EXACTLY ONE language: the language of the traveller's latest message
+(Traditional Chinese for Chinese, English for English). NEVER mix languages in
+one reply, NEVER add a translation, NEVER repeat the same answer in another
+language.`;
+
+function langDirective(lang) {
+  return lang === "en"
+    ? "\n\n[This reply] The website UI is in English. If the traveller's message language is ambiguous, use English. One language only."
+    : "\n\n【本次回覆】網站介面目前為繁體中文。若無法判斷旅客訊息的語言，請使用繁體中文。只能使用單一語言。";
+}
 
 // ---------- Gemini 呼叫 ----------
 
@@ -97,7 +108,7 @@ async function handleChat(body, apiKey) {
   contents.push({ role: "user", parts: [{ text: message }] });
 
   const data = await callGemini(MODEL, {
-    system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+    system_instruction: { parts: [{ text: SYSTEM_PROMPT + langDirective(body.lang) }] },
     contents,
     generationConfig: { temperature: 0.7, maxOutputTokens: 512 }
   }, apiKey);
@@ -122,12 +133,12 @@ async function handleVoice(body, apiKey) {
     role: "user",
     parts: [
       { inline_data: { mime_type: mime, data: audio.data } },
-      { text: "這是旅客的語音訊息。請先將語音內容轉成逐字稿（transcript），再以民宿 AI 助理的身分回覆（reply），並使用旅客語音所用的語言。" }
+      { text: "這是旅客的語音訊息。請先將語音內容轉成逐字稿（transcript），再以民宿 AI 助理的身分回覆（reply）。reply 必須只使用旅客語音所用的單一語言，不可混用或翻譯。" }
     ]
   });
 
   const data = await callGemini(MODEL, {
-    system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+    system_instruction: { parts: [{ text: SYSTEM_PROMPT + langDirective(body.lang) }] },
     contents,
     generationConfig: {
       temperature: 0.7,

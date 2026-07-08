@@ -1,6 +1,6 @@
 // 聽見蝸牛 Snail B&B — AI 助理「小蝸」（全 Gemini 驅動）
-// 文字對話、語音輸入（錄音送 Gemini 聽打＋回覆）、語音回覆（Gemini TTS）
-// 全部經由 /api/assistant（Vercel serverless function）呼叫 Gemini API。
+// 文字對話、連續語音對話（免按送出：靜音偵測自動送出、即時字幕、自動接續聆聽）、
+// 語音回覆（Gemini TTS）。全部經由 /api/assistant 呼叫 Gemini API。
 // API 失敗時誠實顯示錯誤與「重試」，不使用罐頭回覆。
 
 (function () {
@@ -112,30 +112,71 @@
   }
 
   // ---------- 語音回覆（Gemini TTS） ----------
+  // iOS/Safari 只允許在使用者手勢中啟動音訊：第一次點擊時以無聲音檔「解鎖」
+  // 一個共用的 <audio> 元素，之後的 TTS 皆重用該元素即可自動播放。
+  // Gemini TTS 失敗（如流量限制）時改用瀏覽器內建語音，確保每次都有聲音。
+
+  const SILENT_WAV = "data:audio/wav;base64,UklGRjgAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YRQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==";
+  const audioEl = new Audio();
+  audioEl.preload = "auto";
+  let audioUnlocked = false;
+
+  function unlockAudio() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+    audioEl.src = SILENT_WAV;
+    audioEl.play().catch(() => {});
+  }
 
   let ttsOn = false;
-  let currentAudio = null;
 
   function stopAudio() {
-    if (currentAudio) {
-      currentAudio.pause();
-      currentAudio = null;
-    }
+    audioEl.onended = null;
+    audioEl.onerror = null;
+    audioEl.pause();
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
   }
 
-  async function speak(text) {
-    try {
-      const data = await callApi({ action: "tts", text });
-      if (!data || !data.audio) return;
+  const ttsPlainText = (text) => text.replace(/\*\*/g, "").replace(/\s+/g, " ").trim();
+
+  function playDataUrl(url) {
+    return new Promise((resolve) => {
       stopAudio();
-      currentAudio = new Audio(`data:${data.mime || "audio/wav"};base64,${data.audio}`);
-      currentAudio.play().catch(() => {});
-    } catch {
-      // 語音合成失敗時安靜略過，文字回覆仍在畫面上
-    }
+      audioEl.onended = () => resolve(true);
+      audioEl.onerror = () => resolve(false);
+      audioEl.src = url;
+      audioEl.play().catch(() => resolve(false));
+    });
   }
+
+  function speakBrowser(text) {
+    return new Promise((resolve) => {
+      if (!("speechSynthesis" in window)) { resolve(); return; }
+      const u = new SpeechSynthesisUtterance(ttsPlainText(text));
+      u.lang = currentLang() === "en" ? "en-US" : "zh-TW";
+      u.onend = resolve;
+      u.onerror = resolve;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    });
+  }
+
+  // 播放語音回覆並等待播完；Gemini TTS 失敗時改用瀏覽器語音
+  async function speakAndWait(text) {
+    try {
+      const data = await callApi({ action: "tts", text: ttsPlainText(text) });
+      if (data && data.audio) {
+        const ok = await playDataUrl(`data:${data.mime || "audio/wav"};base64,${data.audio}`);
+        if (ok) return;
+      }
+    } catch { /* fall through to browser voice */ }
+    await speakBrowser(text);
+  }
+
+  function speak(text) { return speakAndWait(text); }
 
   ttsBtn.addEventListener("click", () => {
+    unlockAudio();
     ttsOn = !ttsOn;
     ttsBtn.setAttribute("aria-pressed", ttsOn);
     ttsBtn.innerHTML = ttsOn ? ICONS.speakerOn : ICONS.speakerOff;
@@ -166,7 +207,7 @@
     addMessage(escapeHTML(question), "user");
     const typing = addMessage(typingHTML, "bot");
     try {
-      const data = await callApi({ action: "chat", message: question, history: history.slice(-12) });
+      const data = await callApi({ action: "chat", message: question, history: history.slice(-12), lang: currentLang() });
       history.push({ role: "user", text: question }, { role: "model", text: data.reply });
       typing.innerHTML = renderReply(data.reply);
       messages.scrollTop = messages.scrollHeight;
@@ -179,39 +220,184 @@
     }
   }
 
-  async function sendVoice(wavBase64) {
-    if (busy) return;
-    setBusy(true);
-    const userEl = addMessage(`<em>${t("（語音訊息，辨識中…）", "(voice message, transcribing…)")}</em>`, "user");
+  // ---------- 連續語音對話模式 ----------
+  // 按一次麥克風進入語音模式：持續聆聽 → 說話時顯示即時字幕 →
+  // 停頓（靜音偵測）自動送出 Gemini → 播放語音回覆 → 自動繼續聆聽。
+  // 再按一次麥克風（或關閉視窗）結束。
+
+  const VOICE = Object.assign({
+    rate: 16000,        // 上傳取樣率
+    threshold: 0.012,   // 語音能量門檻（RMS）
+    silenceMs: 1300,    // 停頓多久視為說完
+    minSpeechMs: 350,   // 少於此語音長度視為雜訊，不送出
+    maxUtterMs: 20000   // 單句最長錄音
+  }, window.__VOICE_CFG || {});
+
+  let voiceMode = false;
+  let vState = "idle"; // idle | listening | processing | speaking
+  let media = null;    // { stream, ctx, source, node }
+  let utter = null;    // { chunks, speechMs, heard, startAt, lastVoiceAt, captionEl }
+  let recog = null;    // 即時字幕（僅顯示用；正式逐字稿以 Gemini 為準）
+
+  const statusEl = document.createElement("div");
+  statusEl.className = "voice-status";
+  statusEl.hidden = true;
+  form.parentNode.insertBefore(statusEl, form);
+
+  function setStatus(textZh, textEn) {
+    statusEl.innerHTML = `<span class="voice-dot" aria-hidden="true"></span>${t(textZh, textEn)} <span class="voice-hint">${t("再按麥克風結束", "tap mic to end")}</span>`;
+  }
+
+  function setVoiceUI(on) {
+    micBtn.classList.toggle("recording", on);
+    micBtn.innerHTML = on ? ICONS.stop : ICONS.mic;
+    micBtn.title = on ? t("結束語音對話", "End voice conversation") : t("開始語音對話", "Start voice conversation");
+    statusEl.hidden = !on;
+    input.placeholder = on ? t("語音對話中…", "Voice conversation on…") : t("想問點什麼呢？", "Ask me anything…");
+  }
+
+  // -- 即時字幕（瀏覽器支援時） --
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  function startCaptions() {
+    if (!SR) return;
+    try {
+      recog = new SR();
+      recog.lang = currentLang() === "en" ? "en-US" : "zh-TW";
+      recog.continuous = true;
+      recog.interimResults = true;
+      recog.onresult = (e) => {
+        let text = "";
+        for (const r of e.results) text += r[0].transcript;
+        if (text.trim() && utter && utter.captionEl) {
+          utter.captionEl.innerHTML = escapeHTML(text.trim());
+          messages.scrollTop = messages.scrollHeight;
+        }
+      };
+      recog.onerror = () => {};
+      recog.start();
+    } catch { recog = null; }
+  }
+
+  function stopCaptions() {
+    if (recog) { try { recog.stop(); } catch {} recog = null; }
+  }
+
+  // -- 聆聽迴圈 --
+  function startListening() {
+    if (!voiceMode) return;
+    const captionEl = addMessage(`<em>${t("（聆聽中…）", "(listening…)")}</em>`, "user");
+    utter = { chunks: [], speechMs: 0, heard: false, startAt: performance.now(), lastVoiceAt: 0, captionEl };
+    vState = "listening";
+    setStatus("聆聽中，請直接說話", "Listening — just speak");
+    startCaptions();
+  }
+
+  function discardUtterance() {
+    if (utter && utter.captionEl) utter.captionEl.remove();
+    utter = null;
+  }
+
+  async function endUtterance() {
+    if (vState !== "listening" || !utter) return;
+    vState = "processing";
+    stopCaptions();
+    const u = utter;
+    utter = null;
+
+    if (!u.heard || u.speechMs < VOICE.minSpeechMs) {
+      // 只有環境雜訊：丟棄並重新聆聽
+      u.captionEl.remove();
+      startListening();
+      return;
+    }
+
+    setStatus("思考中…", "Thinking…");
+    u.captionEl.innerHTML = `<em>${t("（辨識中…）", "(transcribing…)")}</em>`;
     const typing = addMessage(typingHTML, "bot");
+    const wav = encodeWav(u.chunks, media ? media.ctx.sampleRate : VOICE.rate);
+
     try {
       const data = await callApi({
         action: "voice",
-        audio: { data: wavBase64, mime: "audio/wav" },
-        history: history.slice(-12)
+        audio: { data: wav, mime: "audio/wav" },
+        history: history.slice(-12),
+        lang: currentLang()
       });
-      userEl.innerHTML = escapeHTML(data.transcript || t("（語音訊息）", "(voice message)"));
+      u.captionEl.innerHTML = escapeHTML(data.transcript || t("（語音訊息）", "(voice message)"));
       history.push({ role: "user", text: data.transcript || "(voice)" }, { role: "model", text: data.reply });
       typing.innerHTML = renderReply(data.reply);
       messages.scrollTop = messages.scrollHeight;
-      speak(data.reply); // 語音提問一律以語音回覆
+      await speakReplyInVoiceMode(data.reply);
     } catch (err) {
-      userEl.innerHTML = `<em>${t("（語音訊息）", "(voice message)")}</em>`;
       typing.remove();
-      showError(err, () => sendVoice(wavBase64));
-    } finally {
-      setBusy(false);
+      showError(err, () => {});
     }
+    if (voiceMode) startListening();
   }
 
-  // ---------- 語音輸入：錄音 → 16kHz 單聲道 WAV → Gemini ----------
-  // 使用 Web Audio 取得 PCM 自行編成 WAV，格式為 Gemini 官方支援的 audio/wav。
+  // 語音模式播放回覆（沿用共用的 speakAndWait；播放期間暫停聆聽避免收到喇叭聲）
+  async function speakReplyInVoiceMode(text) {
+    vState = "speaking";
+    setStatus("回覆中…", "Replying…");
+    await speakAndWait(text);
+  }
 
-  const RECORD_RATE = 16000;
-  const MAX_RECORD_MS = 30000;
+  async function enterVoiceMode() {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = ctx.createMediaStreamSource(stream);
+    const node = ctx.createScriptProcessor(4096, 1, 1);
 
-  let recState = null; // { stream, ctx, source, node, chunks, timer }
+    node.onaudioprocess = (e) => {
+      if (vState !== "listening" || !utter) return;
+      const buf = e.inputBuffer.getChannelData(0);
+      utter.chunks.push(new Float32Array(buf));
 
+      let sum = 0;
+      for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
+      const rms = Math.sqrt(sum / buf.length);
+      const bufMs = (buf.length / ctx.sampleRate) * 1000;
+      const now = performance.now();
+
+      if (rms > VOICE.threshold) {
+        utter.heard = true;
+        utter.speechMs += bufMs;
+        utter.lastVoiceAt = now;
+      }
+
+      // 尚未偵測到語音時，只保留最近 2 秒，避免記憶體無限成長
+      if (!utter.heard && utter.chunks.length > Math.ceil((2000 / bufMs))) utter.chunks.shift();
+
+      if (utter.heard && now - utter.lastVoiceAt > VOICE.silenceMs) endUtterance();
+      else if (utter.heard && now - utter.startAt > VOICE.maxUtterMs) endUtterance();
+    };
+
+    source.connect(node);
+    node.connect(ctx.destination);
+    media = { stream, ctx, source, node };
+    voiceMode = true;
+    setVoiceUI(true);
+    startListening();
+  }
+
+  function exitVoiceMode() {
+    voiceMode = false;
+    stopCaptions();
+    stopAudio();
+    if (vState === "listening") discardUtterance();
+    vState = "idle";
+    if (media) {
+      media.node.disconnect();
+      media.source.disconnect();
+      media.stream.getTracks().forEach((tr) => tr.stop());
+      media.ctx.close().catch(() => {});
+      media = null;
+    }
+    setVoiceUI(false);
+  }
+
+  // -- PCM → 16kHz 單聲道 WAV（Gemini 官方支援格式） --
   function encodeWav(chunks, sourceRate) {
     let length = 0;
     for (const c of chunks) length += c.length;
@@ -219,8 +405,7 @@
     let off = 0;
     for (const c of chunks) { samples.set(c, off); off += c.length; }
 
-    // 重取樣到 16kHz（線性內插）
-    const ratio = sourceRate / RECORD_RATE;
+    const ratio = sourceRate / VOICE.rate;
     const outLen = Math.floor(samples.length / ratio);
     const out = new Int16Array(outLen);
     for (let i = 0; i < outLen; i++) {
@@ -241,15 +426,14 @@
     view.setUint32(16, 16, true);
     view.setUint16(20, 1, true);
     view.setUint16(22, 1, true);
-    view.setUint32(24, RECORD_RATE, true);
-    view.setUint32(28, RECORD_RATE * 2, true);
+    view.setUint32(24, VOICE.rate, true);
+    view.setUint32(28, VOICE.rate * 2, true);
     view.setUint16(32, 2, true);
     view.setUint16(34, 16, true);
     writeStr(36, "data");
     view.setUint32(40, out.length * 2, true);
     new Int16Array(buf, 44).set(out);
 
-    // ArrayBuffer → base64
     const bytes = new Uint8Array(buf);
     let bin = "";
     const CHUNK = 0x8000;
@@ -259,50 +443,12 @@
     return btoa(bin);
   }
 
-  function setRecordingUI(on) {
-    micBtn.classList.toggle("recording", on);
-    micBtn.innerHTML = on ? ICONS.stop : ICONS.mic;
-    input.placeholder = on
-      ? t("正在聆聽，再按一下送出…", "Listening — tap again to send…")
-      : t("想問點什麼呢？", "Ask me anything…");
-  }
-
-  async function startRecording() {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const source = ctx.createMediaStreamSource(stream);
-    const node = ctx.createScriptProcessor(4096, 1, 1);
-    const chunks = [];
-    node.onaudioprocess = (e) => chunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));
-    source.connect(node);
-    node.connect(ctx.destination);
-    const timer = setTimeout(stopRecording, MAX_RECORD_MS);
-    recState = { stream, ctx, source, node, chunks, timer };
-    setRecordingUI(true);
-  }
-
-  function stopRecording() {
-    if (!recState) return;
-    const { stream, ctx, source, node, chunks, timer } = recState;
-    recState = null;
-    clearTimeout(timer);
-    node.disconnect();
-    source.disconnect();
-    stream.getTracks().forEach((tr) => tr.stop());
-    const rate = ctx.sampleRate;
-    ctx.close().catch(() => {});
-    setRecordingUI(false);
-    if (!chunks.length) return;
-    const wav = encodeWav(chunks, rate);
-    sendVoice(wav);
-  }
-
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     micBtn.addEventListener("click", async () => {
-      if (recState) { stopRecording(); return; }
-      if (busy) return;
+      unlockAudio();
+      if (voiceMode) { exitVoiceMode(); return; }
       try {
-        await startRecording();
+        await enterVoiceMode();
       } catch {
         addMessage(t("無法使用麥克風，請確認瀏覽器權限。", "Couldn't access the microphone — please check browser permissions."), "bot error");
       }
@@ -317,15 +463,16 @@
     const lang = currentLang();
     chipsBox.innerHTML = SUGGESTIONS.map((s) => `<button type="button" data-q="${s[lang]}">${s[lang]}</button>`).join("");
     chipsBox.querySelectorAll("button").forEach((b) =>
-      b.addEventListener("click", () => sendText(b.dataset.q))
+      b.addEventListener("click", () => { unlockAudio(); sendText(b.dataset.q); })
     );
   }
 
   function applyLang() {
     renderChips();
     root.querySelector(".chatbot-title").textContent = t("小蝸 AI 助理", "Snaily · AI Concierge");
-    if (!recState) input.placeholder = t("想問點什麼呢？", "Ask me anything…");
-    micBtn.title = t("語音輸入", "Voice input");
+    if (!voiceMode) input.placeholder = t("想問點什麼呢？", "Ask me anything…");
+    if (voiceMode && vState === "listening") setStatus("聆聽中，請直接說話", "Listening — just speak");
+    micBtn.title = voiceMode ? t("結束語音對話", "End voice conversation") : t("開始語音對話", "Start voice conversation");
     ttsBtn.title = t("語音回覆", "Voice replies");
     toggle.setAttribute("aria-label", t("開啟 AI 助理", "Open AI assistant"));
   }
@@ -344,22 +491,23 @@
         const g = addMessage(typingHTML, "bot");
         setTimeout(() => {
           g.innerHTML = t(
-            "您好，我是小蝸——聽見蝸牛的 AI 助理。<br>放慢腳步，想知道什麼都可以問我：訂房、房型、周邊景點、行程建議都可以。也可以按麥克風直接用說的。",
-            "Hello, I'm Snaily — the Snail B&B AI concierge.<br>Ask me anything: bookings, rooms, nearby attractions, trip ideas. You can also press the microphone and just speak."
+            "您好，我是小蝸——聽見蝸牛的 AI 助理。<br>放慢腳步，想知道什麼都可以問我：訂房、房型、周邊景點、行程建議都可以。按下麥克風即可開始語音對話——說完稍作停頓就會自動送出，不用按任何鍵。",
+            "Hello, I'm Snaily — the Snail B&B AI concierge.<br>Ask me anything: bookings, rooms, nearby attractions, trip ideas. Press the microphone to start a voice conversation — just pause when you finish speaking and it sends automatically."
           );
           messages.scrollTop = messages.scrollHeight;
         }, 450);
       }
-    } else if (recState) {
-      stopRecording();
+    } else if (voiceMode) {
+      exitVoiceMode();
     }
   }
 
-  toggle.addEventListener("click", () => openPanel(panel.hidden));
+  toggle.addEventListener("click", () => { unlockAudio(); openPanel(panel.hidden); });
   root.querySelector(".chatbot-close").addEventListener("click", () => openPanel(false));
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+    unlockAudio();
     const q = input.value.trim();
     if (!q) return;
     input.value = "";
